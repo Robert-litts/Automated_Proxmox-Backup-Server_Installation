@@ -1,0 +1,18 @@
+arch: {{ arch }}
+cores: {{ cores }}
+features: {{ features }}
+hostname: {{ hostname }}
+memory: {{ memory }}
+mp0: {{ mp0 }}
+net0: name={{ net0_name }},bridge={{ net0_bridge }},firewall={{ net0_firewall }},hwaddr={{ net0_hwaddr }},ip={{ net0_ip }},type={{ net0_type }}
+onboot: {{ onboot }}
+ostype: {{ ostype }}
+rootfs: {{ rootfs }}:subvol-{{ container_id }}-disk-0,size=10G
+startup: {{ startup }}
+swap: {{ swap }}
+unprivileged: {{ unprivileged }}
+
+
+{% for idmap in lxc_idmaps %}
+lxc.idmap: {{ idmap }}
+{% endfor %}

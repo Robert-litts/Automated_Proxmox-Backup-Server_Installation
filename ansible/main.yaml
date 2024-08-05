@@ -1,0 +1,11 @@
+- name: Configure Proxmox and LXC
+  hosts: proxmox_host
+  gather_facts: yes
+  roles:
+    - proxmox_lxc_pbs
+
+- name: Install Proxmox Backup Server on LXC
+  hosts: lxc_container
+  gather_facts: no
+  roles:
+    - pbs_install

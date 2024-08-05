@@ -1,0 +1,33 @@
+
+mount_directory: /mnt/docker/test #location on the host where cifs will be mounted
+
+fstab_entry:
+  - "//192.168.5.202/test /mnt/docker/test cifs _netdev,x-systemd.automount,noatime,uid=100000,gid=110000,dir_mode=0770,file_mode=0770,user=proxmox,pass=secret_password 0 0"
+
+mp0: /mnt/docker/test,mp=/mnt/proxmox_backup_server
+
+subuid_entries:
+  - "root:100000:65536"
+  - "root:34:1"
+
+subgid_entries:
+  - "root:100000:65536"
+  - "root:34:1"
+
+lxc_idmap_lines:
+  - "lxc.idmap: u 0 100000 34"
+  - "lxc.idmap: u 34 34 1"
+  - "lxc.idmap: u 35 100035 65501"
+  - "lxc.idmap: g 0 100000 34"
+  - "lxc.idmap: g 34 34 1"
+  - "lxc.idmap: g 35 100035 65501"
+
+proxmox_gpg_key: https://enterprise.proxmox.com/debian/proxmox-release-bookworm.gpg
+proxmox_repo_urls:
+  - 'deb http://deb.debian.org/debian bookworm main contrib'
+  - 'deb http://deb.debian.org/debian bookworm-updates main contrib'
+  - 'deb http://security.debian.org bookworm-security main contrib'
+  - 'deb http://download.proxmox.com/debian/pbs-client bookworm main'
+  - 'deb http://download.proxmox.com/debian/pbs bookworm pbs-no-subscription'
+  
+proxmox_package: proxmox-backup-server

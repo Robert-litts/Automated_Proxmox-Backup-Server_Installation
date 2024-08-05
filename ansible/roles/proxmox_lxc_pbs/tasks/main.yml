@@ -1,0 +1,70 @@
+- name: Ensure /etc/subuid has the correct entries
+  ansible.builtin.lineinfile:
+    path: /etc/subuid
+    line: "{{ item }}"
+    create: yes
+    state: present
+  loop: "{{ subuid_entries }}"
+  notify: Reload systemd
+
+- name: Ensure /etc/subgid has the correct entries
+  ansible.builtin.lineinfile:
+    path: /etc/subgid
+    line: "{{ item }}"
+    create: yes
+    state: present
+  loop: "{{ subgid_entries }}"
+  notify: Reload systemd
+
+- name: Ensure mountpoint directory exists
+  file:
+    path: "{{mount_directory}}"
+    state: directory
+
+- name: Ensure /etc/fstab has the correct entry
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    line: "{{ fstab_entry[0] }}"
+    create: yes
+    state: present
+  notify: Remount filesystems
+
+- name: Ensure mp0 line is present in the Proxmox LXC config file
+  lineinfile:
+    path: /etc/pve/lxc/{{ container_id }}.conf
+    line: "mp0: {{ mp0 }}"
+    insertafter: EOF
+
+- name: Ensure lxc.idmap lines are present in the Proxmox LXC config file
+  lineinfile:
+    path: /etc/pve/lxc/{{ container_id }}.conf
+    line: "{{ item }}"
+    insertafter: EOF
+  loop: "{{ lxc_idmap_lines }}"
+
+- name: Check if the LXC container is running
+  ansible.builtin.command:
+    cmd: pct status {{ container_id }}
+  register: status_result
+  failed_when: status_result.rc != 0
+
+- name: Start LXC container
+  ansible.builtin.command:
+    cmd: pct start {{ container_id }}
+  register: start_result
+  failed_when: start_result.rc != 0
+  changed_when: "'started' in start_result.stdout"
+  when: "'running' not in status_result.stdout"
+
+
+
+
+
+
+
+
+
+
+
+
+

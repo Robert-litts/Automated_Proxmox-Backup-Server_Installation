@@ -1,0 +1,9 @@
+# handlers/main.yml
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Remount filesystems
+  ansible.builtin.command:
+    cmd: mount -a

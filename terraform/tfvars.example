@@ -1,0 +1,55 @@
+# Provider Settings (Replace all for your environment)
+
+pm_api_url            = "https://your-proxmox-host:8006/api2/json"
+pm_api_token_id       = "your_username@pam!your_token_id"
+pm_api_token_secret   = "your_secret_token"
+pm_tls_insecure       = true
+pm_timeout            = 1000
+pm_parallel           = 2
+
+
+# Resource Settings
+
+proxmox_target_node = "pve1"
+
+hostname = "proxmox-backup-server"
+
+password = "super-secret-password"
+
+tags = "PBS"
+
+ostemplate = "NFS_shared:vztmpl/debian-12-standard_12.0-1_amd64.tar.zst"
+
+vm_id = 1000
+
+cores = 2
+
+memory = 4096
+
+swap = 512
+
+arch = "amd64"
+
+ostype = "debian"
+
+unprivileged = true
+
+ssh_public_keys = ssh-ed25519 ABCDEFG user #Replace with you SSH Public Key
+
+start = false
+
+nameserver = "192.168.5.1" # Replace with your nameserver IP
+
+rootfs_storage = "local-zfs" # Replace with your storage
+
+rootfs_size = "10G"
+
+network_bridge = "vmbr0"
+
+network_name = "eth0"
+
+ip_address = "192.168.5.244" # Replace with your desired IP address
+
+gateway = "192.168.5.1" # Replace with your gateway IP
+
+features_nesting = true

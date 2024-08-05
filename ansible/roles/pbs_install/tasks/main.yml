@@ -1,0 +1,49 @@
+- name: Wait for SSH to be available on the LXC container
+  wait_for:
+    host: "{{ ansible_host }}"
+    port: 22
+    state: started
+    timeout: 300  # Wait up to 5 minutes for SSH to be available
+  delegate_to: localhost
+  run_once: true
+
+- name: Gather facts
+  ansible.builtin.setup:
+
+- name: Ensure gnupg is installed
+  ansible.builtin.apt:
+    name: gnupg
+    state: present
+
+- name: Add Proxmox repository key
+  ansible.builtin.apt_key:
+    url: "{{ proxmox_gpg_key }}"
+    state: present
+
+- name: Add Proxmox repositories
+  ansible.builtin.apt_repository:
+    repo: "{{ item }}"
+    state: present
+  loop: "{{ proxmox_repo_urls }}"
+
+- name: Check if /etc/apt/sources.list.d/pbs-enterprise.list exists
+  ansible.builtin.stat:
+    path: /etc/apt/sources.list.d/pbs-enterprise.list
+  register: pbs_enterprise_list_stat
+
+- name: Remove the file if it exists
+  file:
+    path: /etc/apt/sources.list.d/pbs-enterprise.list
+    state: absent
+  when: pbs_enterprise_list_stat.stat.exists
+
+- name: Update package cache and upgrade packages
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Install Proxmox Backup Server
+  ansible.builtin.apt:
+    name: "{{ proxmox_package }}"
+    state: present
+

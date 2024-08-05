@@ -1,0 +1,8 @@
+proxmox_gpg_key: https://enterprise.proxmox.com/debian/proxmox-release-bookworm.gpg
+proxmox_repo_urls:
+  - 'deb http://deb.debian.org/debian bookworm main contrib'
+  - 'deb http://deb.debian.org/debian bookworm-updates main contrib'
+  - 'deb http://security.debian.org bookworm-security main contrib'
+  - 'deb http://download.proxmox.com/debian/pbs-client bookworm main'
+  - 'deb http://download.proxmox.com/debian/pbs bookworm pbs-no-subscription'
+proxmox_package: proxmox-backup-server
